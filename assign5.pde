@@ -106,7 +106,8 @@ void initGame(){
 	initCabbages();
 
 	// Requirement #2: Initialize clocks and their position
-
+  initClocks();
+  
 }
 
 void initPlayer(){
@@ -193,6 +194,17 @@ void initCabbages(){
 void initClocks(){
 	// Requirement #1: Complete this method based on initCabbages()
 	// - Remember to reroll if the randomized position has a cabbage on the same soil!
+  clockX = new float[6];
+  clockY = new float[6];
+
+  for(int i = 0; i < clockX.length; i++){
+    clockX[i] = SOIL_SIZE * floor(random(SOIL_COL_COUNT));
+    clockY[i] = SOIL_SIZE * ( i * 4 + floor(random(4)));
+    if(clockX[i]==cabbageX[i]&&clockY[i]==cabbageX[i]){
+      clockX[i] = SOIL_SIZE * floor(random(SOIL_COL_COUNT));
+      clockY[i] = SOIL_SIZE * ( i * 4 + floor(random(4)));
+    }
+  }
 }
 
 void draw() {
@@ -301,7 +313,19 @@ void draw() {
 
 		// Requirement #1: Clocks
 		// --- Requirement #3: Use boolean isHit(...) to detect clock <-> player collision
+    for(int i = 0; i < clockX.length; i++){
+      image(clock, clockX[i], clockY[i]);
+      if(clockX[i] + SOIL_SIZE > playerX    // r1 right edge past r2 left
+        && clockX[i] < playerX + SOIL_SIZE    // r1 left edge past r2 right
+        && clockY[i] + SOIL_SIZE > playerY    // r1 top edge past r2 bottom
+        && clockY[i] < playerY + SOIL_SIZE) { // r1 bottom edge past r2 top
 
+        clockX[i] = clockY[i] = -1000;
+        addTime();
+      }
+
+    }
+      
 		// Groundhog
 
 		PImage groundhogDisplay = groundhogIdle;
@@ -526,21 +550,30 @@ void drawDepthUI(){
 }
 
 void drawTimerUI(){
-	String timeString = str(gameTimer); // Requirement #4: Get the mm:ss string using String convertFramesToTimeString(int frames)
-
+	// Requirement #4: Get the mm:ss string using String convertFramesToTimeString(int frames)
+  int minutes = floor(gameTimer/3600);
+  int seconds = floor((gameTimer%3600)/60);
+  String pMinutes = nf(minutes,2);
+  String pSeconds = nf(seconds,2);
 	textAlign(LEFT, BOTTOM);
 
 	// Time Text Shadow Effect - You don't have to change this!
 	fill(0, 120);
-	text(timeString, 3, height + 3);
+	text(pMinutes + ":" + pSeconds, 3, height + 3);
 
 	// Actual Time Text
 	color timeTextColor = #ffffff; 		// Requirement #5: Get the correct color using color getTimeTextColor(int frames)
-	fill(timeTextColor);
-	text(timeString, 0, height);
+	if(gameTimer>=7200){ timeTextColor = #00ffff; }
+  if(gameTimer<7200 && gameTimer>=3600){ timeTextColor = #ffffff; }
+  if(gameTimer<3600 && gameTimer>=1800){ timeTextColor = #ffcc00; }
+  if(gameTimer<1800 && gameTimer>=600){ timeTextColor = #ff6600; }
+  if(gameTimer<600 && gameTimer>=0){ timeTextColor = #ff0000; }
+  fill(timeTextColor);
+	text(pMinutes + ":" + pSeconds, 0, height);
 }
 
-void addTime(float seconds){					// Requirement #2
+void addTime(){				// Requirement #2
+  gameTimer += 900;
 }
 
 boolean isHit(float ax, float ay, float aw, float ah, float bx, float by, float bw, float bh){
