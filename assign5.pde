@@ -555,13 +555,8 @@ void drawTimerUI(){
 	text(pMinutes + ":" + pSeconds, 3, height + 3);
 
 	// Actual Time Text
-	color timeTextColor = #ffffff; 		// Requirement #5: Get the correct color using color getTimeTextColor(int frames)
-	if(gameTimer>=7200){ timeTextColor = #00ffff; }
-  if(gameTimer<7200 && gameTimer>=3600){ timeTextColor = #ffffff; }
-  if(gameTimer<3600 && gameTimer>=1800){ timeTextColor = #ffcc00; }
-  if(gameTimer<1800 && gameTimer>=600){ timeTextColor = #ff6600; }
-  if(gameTimer<600 && gameTimer>=0){ timeTextColor = #ff0000; }
-  fill(timeTextColor);
+	color timeTextColor = getTimeTextColor(gameTimer); 		// Requirement #5: Get the correct color using color getTimeTextColor(int frames)
+	fill(timeTextColor);
 	text(pMinutes + ":" + pSeconds, 0, height);
 }
 
@@ -583,7 +578,11 @@ String convertFramesToTimeString(int frames){	// Requirement #4
 }
 
 color getTimeTextColor(int frames){				// Requirement #5
-	return #ffffff;
+	if(gameTimer>=7200){ return #00ffff; }
+  if(gameTimer<7200 && gameTimer>=3600){ return #ffffff; }
+  if(gameTimer<3600 && gameTimer>=1800){ return #ffcc00; }
+  if(gameTimer<1800 && gameTimer>=600){ return #ff6600; }
+  else{return #ff0000;}
 }
 
 int getEnemyIndexByRow(int row){				// Requirement #6
