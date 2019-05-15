@@ -465,7 +465,8 @@ void draw() {
 
 		// Requirement #6:
 		//   Call drawCaution() to draw caution sign
-
+    drawCaution();
+    
 		popMatrix();
 
 		// Depth UI
@@ -591,8 +592,8 @@ int getEnemyIndexByRow(int row){				// Requirement #6
 		// - If there's a soldier in that row, return that soldier's index in soldierX/soldierY
 		// (for example, if soldierY[3] is in that row, return 3)
 		// - Return -1 if there's no soldier in that row
-
-	return -1;
+  
+    return -1;
 }
 
 void drawCaution(){								// Requirement #6
@@ -603,6 +604,11 @@ void drawCaution(){								// Requirement #6
 		// - Use playerRow to calculate the row below the screen
 		// - Use the returned value from int getEnemyIndexByRow(int row) to get the soldier's position from soldierX/soldierY arrays
 		// - Don't draw anything if int getEnemyIndexByRow(int row) returns -1
+    if(soldierY[1] == playerY+SOIL_SIZE*5){image(caution,soldierX[1],soldierY[1]-SOIL_SIZE);}
+    if(soldierY[2] == playerY+SOIL_SIZE*5){image(caution,soldierX[2],soldierY[2]-SOIL_SIZE);}
+    if(soldierY[3] == playerY+SOIL_SIZE*5){image(caution,soldierX[3],soldierY[3]-SOIL_SIZE);}
+    if(soldierY[4] == playerY+SOIL_SIZE*5){image(caution,soldierX[4],soldierY[4]-SOIL_SIZE);}
+    if(soldierY[5] == playerY+SOIL_SIZE*5){image(caution,soldierX[5],soldierY[5]-SOIL_SIZE);}
 }
 
 void keyPressed(){
